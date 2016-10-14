@@ -8,9 +8,9 @@ def make_n_commits(n):
         now = dt.datetime.now().strftime("%H:%M:%S.%f")
         call(["touch", "." + now + '.txt'])
         call(["git", "add", "."])
-        call(["git", "status"])
-        call(["git", "commit", "-m", "'add file'"])
-        # call(["git", "push"])
+        call(["git", "commit", "-m", "'add " + now + " file'"])
+    call(["git", "status"])
+    call(["git", "push"])
 
 
 def main():
