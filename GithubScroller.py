@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/scratch/dpb6/anaconda3/bin/python
 # -----------------------------------------------------------------------------
 #
 #  FreeType high-level python API - Copyright 2011-2015 Nicolas P. Rougier
@@ -16,7 +16,7 @@ from subprocess import call
 from freetype.raw import *
 from PIL import Image
 
-[WIDTH, HEIGHT] = 52, 7
+[WIDTH, HEIGHT] = 104, 7
 
 
 def to_c_str(text):
@@ -28,7 +28,6 @@ def to_c_str(text):
 def draw_bitmap(image, bitmap, x, y):
     x_max = x + bitmap.width
     y_max = y + bitmap.rows
-    p = 0
     for p, i in enumerate(range(x, x_max)):
         for q, j in enumerate(range(y, y_max)):
             if i < 0 or j < 0 or i >= WIDTH or j >= HEIGHT:
@@ -45,7 +44,7 @@ def draw_word(text, image):
     matrix = FT_Matrix()
     face = FT_Face()
     pen = FT_Vector()
-    filename = 'Vera.ttf'
+    font_filename = 'Vera.ttf'
     num_chars = len(text)
     angle = (0. / 360) * 3.14159 * 2
 
@@ -53,7 +52,7 @@ def draw_word(text, image):
     error = FT_Init_FreeType(byref(library))
 
     # create face object, error handling omitted
-    error = FT_New_Face(library, to_c_str(filename), 0, byref(face))
+    error = FT_New_Face(library, to_c_str(font_filename), 0, byref(face))
 
     # set character size: 7pt at 100dpi, error handling omitted
     error = FT_Set_Char_Size(face, 7 * 64, 0, 100, 0)
@@ -89,16 +88,12 @@ def draw_word(text, image):
 
     FT_Done_Face(face)
     FT_Done_FreeType(library)
-
-    today_date = dt.date.today()
-    print(today_date)
     return image
 
 
 def show_word(image):
     plt.imshow(image, origin='lower',
                interpolation='nearest', cmap=plt.cm.gray)
-
     plt.gca().invert_yaxis()
     plt.show()
 
@@ -115,21 +110,22 @@ def make_n_commits(n):
 
 def main():
     image = Image.new('L', (WIDTH, HEIGHT))
-    image = draw_word('DAVID BRADWAY', image)
+    image = draw_word('DAVID P. BRADWAY', image)
     # show_word(image)
     rgb_im = image.convert('RGB')
     commits = [0, 1, 3, 5, 10]
-    for j in range(9):
-        for i in range(HEIGHT):
-            r, g, b = rgb_im.getpixel((j, HEIGHT-1 - i))
-            level = math.floor((r + g + b) /3. /255. *4.)
-            print(commits[level], end='')
-        print('')
 
-    day0 = dt.datetime(2016, 10, 13, 0, 0, 0)
-    print(dt.datetime.today() - day0)
-    # make_n_commits(4)
+    day0 = dt.datetime(2016, 10, 16, 0, 0, 0)
+    day_diff = dt.datetime.today() - day0
+    column = day_diff.days // HEIGHT
+    # print(column)
+    row = day_diff.days % HEIGHT
+    # print(row)
+    r, g, b = rgb_im.getpixel((column, HEIGHT - 1 - row))
+    level = math.floor((r + g + b) / 3. / 255. * (len(commits)-1))
+
+    print(commits[level])
+    make_n_commits(commits[level])
 
 if __name__ == '__main__':
     main()
-
