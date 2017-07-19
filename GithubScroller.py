@@ -104,7 +104,7 @@ def make_n_commits(n):
         call(["touch", "." + now + '.txt'])
         call(["git", "add", "."])
         call(["git", "commit", "-m", "'add " + now + " file'"])
-        call(["git", "rm", "*.txt"])
+        call(["git", "rm", ".*.txt"])
         call(["git", "commit", "-m", "'remove text files'"])
     call(["git", "status"])
     call(["git", "push"])
