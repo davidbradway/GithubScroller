@@ -104,6 +104,8 @@ def make_n_commits(n):
         call(["touch", "." + now + '.txt'])
         call(["git", "add", "."])
         call(["git", "commit", "-m", "'add " + now + " file'"])
+        call(["git", "rm", "*.txt"])
+        call(["git", "commit", "-m", "'remove text files'"])
     call(["git", "status"])
     call(["git", "push"])
 
@@ -115,7 +117,9 @@ def main():
     rgb_im = image.convert('RGB')
     commits = [0, 1, 3, 5, 10]
 
-    day0 = dt.datetime(2016, 10, 16, 0, 0, 0)
+    # need top corner to be sunday of the week
+    # when you want to start drawing pixels
+    day0 = dt.datetime(2017, 7, 16, 0, 0, 0)
     day_diff = dt.datetime.today() - day0
     column = day_diff.days // HEIGHT
     # print(column)
