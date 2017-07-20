@@ -1,4 +1,4 @@
-#!/scratch/dpb6/anaconda3/bin/python
+#!/home/dpb6/miniconda3/bin/python
 # -----------------------------------------------------------------------------
 #
 #  FreeType high-level python API - Copyright 2011-2015 Nicolas P. Rougier
